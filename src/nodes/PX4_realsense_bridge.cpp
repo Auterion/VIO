@@ -27,7 +27,7 @@ PX4_Realsense_Bridge::~PX4_Realsense_Bridge() { delete tf_listener_; }
 void PX4_Realsense_Bridge::odomCallback(const nav_msgs::Odometry& msg) {
   nav_msgs::Odometry output = msg;
   output.header.frame_id = "local_origin";
-  output.child_frame_id = "fcu";
+  output.child_frame_id = "camera_downward";
   mavros_odom_pub_.publish(output);
 }
 }
