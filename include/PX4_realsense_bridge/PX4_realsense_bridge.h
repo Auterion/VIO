@@ -12,7 +12,6 @@ class PX4_Realsense_Bridge {
  public:
   PX4_Realsense_Bridge(const ros::NodeHandle& nh);
   ~PX4_Realsense_Bridge();
-  void publishTF();
 
  private:
   ros::NodeHandle nh_;

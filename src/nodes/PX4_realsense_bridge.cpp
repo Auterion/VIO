@@ -23,23 +23,11 @@ PX4_Realsense_Bridge::PX4_Realsense_Bridge(const ros::NodeHandle& nh)
 
 PX4_Realsense_Bridge::~PX4_Realsense_Bridge() { delete tf_listener_; }
 
-void PX4_Realsense_Bridge::publishTF() {
-  tf::StampedTransform original_transform;
-  try {
-    tf_listener_->waitForTransform("/camera_odom_frame", "/camera_pose_frame",
-                                   ros::Time(0), ros::Duration(2.0));
-    tf_listener_->lookupTransform("/camera_odom_frame", "/camera_pose_frame",
-                                  ros::Time(0), original_transform);
-  } catch (tf::TransformException& ex) {
-    ROS_ERROR("Received an exception in TF: %s", ex.what());
-  }
-
-  tf_broadcaster_.sendTransform(tf::StampedTransform(
-      original_transform.inverse(), original_transform.stamp_,
-      "new_cam_pose_frame", "camera_odom_frame"));
-}
 
 void PX4_Realsense_Bridge::odomCallback(const nav_msgs::Odometry& msg) {
-  mavros_odom_pub_.publish(msg);
+  nav_msgs::Odometry output = msg;
+  output.header.frame_id = "local_origin";
+  output.child_frame_id = "fcu";
+  mavros_odom_pub_.publish(output);
 }
 }

@@ -11,10 +11,6 @@
   <arg name="model" default="iris_depth_camera"/>
   <arg name="build" default="px4_sitl_default"/>
 
-          
-  <!-- Launch static transform publishers -->
-  <node pkg="tf" type="static_transform_publisher" name="tf_cam_fcu"
-          args="0 0 0 0 0 0 fcu new_cam_pose_frame 1000"/>
 
   <!-- Launch Realsense Camera -->
   <include file="$(find realsense2_camera)/launch/demo_t265.launch" >
