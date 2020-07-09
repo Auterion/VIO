@@ -24,8 +24,8 @@
 
   <!-- Launch Realsense Camera -->
   <include file="$(find realsense2_camera)/launch/rs_t265.launch" >
-      <arg name="enable_fisheye1"          value="true"/>
-      <arg name="enable_fisheye2"          value="true"/>
+      <arg name="enable_fisheye1"          value="false"/>
+      <arg name="enable_fisheye2"          value="false"/>
       <arg name="fisheye_fps"              value="30"/>
       <arg name="gyro_fps"                 value="200"/>
       <arg name="accel_fps"                value="62"/>
