@@ -2,6 +2,7 @@
 #define PX4_REALSENSE_BRIDGE
 
 #include <nav_msgs/Odometry.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <mavros_msgs/CompanionProcessStatus.h>
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
@@ -39,7 +40,7 @@ class PX4_Realsense_Bridge {
   // Subscribers
   ros::Subscriber odom_sub_;
   // Publishers
-  ros::Publisher mavros_odom_pub_;
+  ros::Publisher mavros_pose_pub_;
   ros::Publisher mavros_system_status_pub_;
 
   MAV_STATE system_status_{MAV_STATE::MAV_STATE_UNINIT};

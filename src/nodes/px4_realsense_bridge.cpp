@@ -10,13 +10,12 @@ namespace bridge {
 
 PX4_Realsense_Bridge::PX4_Realsense_Bridge(const ros::NodeHandle& nh)
     : nh_(nh) {
-
   // initialize subscribers
   odom_sub_ = nh_.subscribe<const nav_msgs::Odometry&>(
       "/camera/odom/sample_throttled", 10, &PX4_Realsense_Bridge::odomCallback, this);
   // publishers
-  mavros_odom_pub_ =
-      nh_.advertise<nav_msgs::Odometry>("/mavros/odometry/out", 10);
+  mavros_pose_pub_ = 
+      nh_.advertise<geometry_msgs::PoseStamped>("/mavros/vision_pose/pose", 10);
   mavros_system_status_pub_ =
       nh_.advertise<mavros_msgs::CompanionProcessStatus>("/mavros/companion_process/status", 1);
 
@@ -24,20 +23,17 @@ PX4_Realsense_Bridge::PX4_Realsense_Bridge(const ros::NodeHandle& nh)
 
   status_mutex_.reset(new std::mutex);
   worker_ = std::thread(&PX4_Realsense_Bridge::publishSystemStatus, this);
-
-
 };
 
 PX4_Realsense_Bridge::~PX4_Realsense_Bridge() { }
 
-
 void PX4_Realsense_Bridge::odomCallback(const nav_msgs::Odometry& msg) {
-
-  // publish odometry msg
-  nav_msgs::Odometry output = msg;
+  // stamp and frame id are needed for the mavros odometry msg for to be received by uorb topics
+  geometry_msgs::PoseStamped output;
+  output.header.stamp = ros::Time::now();
   output.header.frame_id = msg.header.frame_id;
-  output.child_frame_id = msg.child_frame_id;
-  mavros_odom_pub_.publish(output);
+  output.pose = msg.pose.pose;
+  mavros_pose_pub_.publish(output);
 
   flag_first_pose_received = true;
 
